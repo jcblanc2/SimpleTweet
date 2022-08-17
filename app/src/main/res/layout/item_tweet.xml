@@ -73,7 +73,7 @@
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="300dp"
         android:layout_below="@id/tvBody"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
@@ -89,21 +89,20 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:visibility="gone"
-        android:layout_weight="1" />
-
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/video_cover_1"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:layout_weight="1"
         android:layout_below="@id/tvBody"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:visibility="gone"
-        android:scaleType="centerCrop"
-        android:layout_weight="1"/>
+        android:src="@drawable/ic_twitter"/>
 
 <!--    Linearlayout for icon-->
     <LinearLayout

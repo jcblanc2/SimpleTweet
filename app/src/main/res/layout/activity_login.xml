@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:background="@color/twitter_blue">
+    android:background="@color/twitter_blue_50">
 
     <!-- Load the toolbar here -->
     <include
@@ -36,6 +36,7 @@
             android:layout_marginBottom="20dp"
             android:onClick="loginToRest"
             android:background="@color/twitter_blue"
+            android:textColor="@color/white"
             android:text="@string/login_label" />
 
         <ImageView

@@ -1,5 +1,9 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.codepath.apps.restclienttemplate.TimeFormatter;
 
 import org.json.JSONArray;
@@ -13,9 +17,10 @@ import java.util.List;
 @Parcel
 public class Tweet {
 
-    public String body, createdAt;
-    public User user;
     public Long id;
+    public String body;
+    public String createdAt;
+    public User user;
     public String  favorite_count;
     public String  retweet_count;
     public Entities entities;

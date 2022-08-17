@@ -97,7 +97,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         VideoPlayerView mVideoPlayer_1;
         ImageView mVideoCover;
 
-        // SimpleTweet is an android app that allows a user to view his Twitter timeline. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -137,62 +136,25 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
 
             // --------------------------------------------------------------------- Video player
-            VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
-                @Override
-                public void onPlayerItemChanged(MetaData metaData) {
 
-                }
-            });
-
-            mVideoPlayer_1.addMediaPlayerListener(new SimpleMainThreadMediaPlayerListener(){
-                @Override
-                public void onVideoPreparedMainThread() {
-                    // We hide the cover when video is prepared. Playback is about to start
-                    mVideoCover.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onVideoStoppedMainThread() {
-                    // We show the cover when video is stopped
-                    mVideoCover.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onVideoCompletionMainThread() {
-                    // We show the cover when video is completed
-                    mVideoCover.setVisibility(View.VISIBLE);
-                }
-            });
 
             if(!tweet.exEntities.videoUrl.isEmpty()) {
+                VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
+                    @Override
+                    public void onPlayerItemChanged(MetaData metaData) {
+                    }
+                });
+
                 mVideoPlayer_1.setVisibility(View.VISIBLE);
                 mVideoCover.setVisibility(View.VISIBLE);
 
-                mVideoCover.setOnClickListener(new View.OnClickListener() {
+                mVideoPlayer_1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mVideoPlayerManager.playNewVideo(null, mVideoPlayer_1, tweet.exEntities.videoUrl);
                     }
                 });
             }
-
-
-
-//           if(!tweet.exEntities.videoUrl.isEmpty()){
-//               videoPost.setVisibility(View.VISIBLE);
-//               videoPost.setVideoPath(tweet.exEntities.videoUrl);
-//               MediaController mediaController = new MediaController(context);
-//               mediaController.setAnchorView(videoPost);
-//               videoPost.setMediaController(mediaController);
-//               videoPost.requestFocus();
-//               videoPost.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                   // Close the progress bar and play the video
-//                   public void onPrepared(MediaPlayer mp) {
-//                       videoPost.start();
-//                   }
-//               });
-//
-//           }
             // -------------------------------------------------------------------------------
 
             // add click on a tweet
