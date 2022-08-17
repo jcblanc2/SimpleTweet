@@ -81,16 +81,29 @@
         android:visibility="gone"
         tools:srcCompat="@tools:sample/avatars" />
 
-<!--    <VideoView-->
-<!--        android:id="@+id/videoPost"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="150dp"-->
-<!--        android:layout_below="@id/tvBody"-->
-<!--        android:layout_above="@+id/iconContainer"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:layout_toEndOf="@+id/ivProfileImage" />-->
+    <com.volokh.danylo.video_player_manager.ui.VideoPlayerView
+        android:id="@+id/video_player_1"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/tvBody"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:visibility="gone"
+        android:layout_weight="1" />
 
+
+    <ImageView
+        android:id="@+id/video_cover_1"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/tvBody"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:visibility="gone"
+        android:scaleType="centerCrop"
+        android:layout_weight="1"/>
 
 <!--    Linearlayout for icon-->
     <LinearLayout

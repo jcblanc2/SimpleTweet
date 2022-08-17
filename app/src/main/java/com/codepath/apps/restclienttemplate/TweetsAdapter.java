@@ -94,8 +94,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvLike;
         RelativeLayout containerItem;
         ImageView imagePost;
-//        VideoView videoPost;
-// SimpleTweet is an android app that allows a user to view his Twitter timeline. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
+        VideoPlayerView mVideoPlayer_1;
+        ImageView mVideoCover;
+
+        // SimpleTweet is an android app that allows a user to view his Twitter timeline. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -108,7 +110,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvLike = itemView.findViewById(R.id.tvLike);
             containerItem = itemView.findViewById(R.id.containerItem);
             imagePost = itemView.findViewById(R.id.ivPostImage);
-//            videoPost = itemView.findViewById(R.id.videoPost);
+            mVideoPlayer_1 = itemView.findViewById(R.id.video_player_1);
+            mVideoCover = itemView.findViewById(R.id.video_cover_1);
         }
 
         public void bind(Tweet tweet) {
@@ -134,6 +137,47 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
 
             // --------------------------------------------------------------------- Video player
+            VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
+                @Override
+                public void onPlayerItemChanged(MetaData metaData) {
+
+                }
+            });
+
+            mVideoPlayer_1.addMediaPlayerListener(new SimpleMainThreadMediaPlayerListener(){
+                @Override
+                public void onVideoPreparedMainThread() {
+                    // We hide the cover when video is prepared. Playback is about to start
+                    mVideoCover.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onVideoStoppedMainThread() {
+                    // We show the cover when video is stopped
+                    mVideoCover.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onVideoCompletionMainThread() {
+                    // We show the cover when video is completed
+                    mVideoCover.setVisibility(View.VISIBLE);
+                }
+            });
+
+            if(!tweet.exEntities.videoUrl.isEmpty()) {
+                mVideoPlayer_1.setVisibility(View.VISIBLE);
+                mVideoCover.setVisibility(View.VISIBLE);
+
+                mVideoCover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mVideoPlayerManager.playNewVideo(null, mVideoPlayer_1, tweet.exEntities.videoUrl);
+                    }
+                });
+            }
+
+
+
 //           if(!tweet.exEntities.videoUrl.isEmpty()){
 //               videoPost.setVisibility(View.VISIBLE);
 //               videoPost.setVideoPath(tweet.exEntities.videoUrl);
