@@ -3,6 +3,8 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
@@ -34,6 +37,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     public static Context context;
     List<Tweet> listTweets;
+
 
     // Pass in the context and list of tweets
     public TweetsAdapter(Context context, List<Tweet> tweets) {
@@ -107,7 +111,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             containerItem = itemView.findViewById(R.id.containerItem);
             imagePost = itemView.findViewById(R.id.ivPostImage);
             videoPlayer = itemView.findViewById(R.id.video_player);
-
         }
 
         public void bind(Tweet tweet) {
@@ -162,11 +165,22 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 public void onClick(View view) {
                     int like = Integer.parseInt(tweet.favorite_count);
                     if (!tweet.favorited){
-                     tvLike.setText(String.valueOf(++like));
-//                     tvLike.setCompoundDrawables(R.drawable.red_heart);
-                     tweet.favorited = true;
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart);
+                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                        tvLike.setCompoundDrawables(drawable, null, null, null);
+
+                        tvLike.setText(String.valueOf(++like));
+                        tweet.favorited = true;
+
                  }else {
+                        ++like;
+
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
+                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                        tvLike.setCompoundDrawables(drawable, null, null, null);
+
                         tvLike.setText(String.valueOf(--like));
+                        tweet.favorited = false;
                     }
 
 

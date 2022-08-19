@@ -123,6 +123,7 @@
             tools:text="23"
             app:drawableLeftCompat="@drawable/cards_heart_outline" />
 
+
         <TextView
             android:id="@+id/tvShare"
             android:layout_width="wrap_content"

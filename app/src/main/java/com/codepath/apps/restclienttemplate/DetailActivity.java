@@ -104,8 +104,10 @@ public class DetailActivity extends AppCompatActivity {
             });
 
             mVideoPlayerManager.playNewVideo(null, videoPlayer, tweet.exEntities.videoUrl);
-
         }
+
+
+
 
 
     }
