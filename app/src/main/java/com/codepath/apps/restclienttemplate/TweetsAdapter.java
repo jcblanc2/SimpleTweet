@@ -2,21 +2,18 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
-import android.media.MediaPlayer;
-import android.util.Log;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
-
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -25,8 +22,8 @@ import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener;
 import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
 import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
 import com.volokh.danylo.video_player_manager.meta.MetaData;
-import com.volokh.danylo.video_player_manager.ui.SimpleMainThreadMediaPlayerListener;
 import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
+
 
 import org.parceler.Parcels;
 
@@ -94,8 +91,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvLike;
         RelativeLayout containerItem;
         ImageView imagePost;
-        VideoPlayerView mVideoPlayer_1;
-        ImageView mVideoCover;
+        VideoPlayerView videoPlayer;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,8 +106,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvLike = itemView.findViewById(R.id.tvLike);
             containerItem = itemView.findViewById(R.id.containerItem);
             imagePost = itemView.findViewById(R.id.ivPostImage);
-            mVideoPlayer_1 = itemView.findViewById(R.id.video_player_1);
-            mVideoCover = itemView.findViewById(R.id.video_cover_1);
+            videoPlayer = itemView.findViewById(R.id.video_player);
+
         }
 
         public void bind(Tweet tweet) {
@@ -135,27 +132,19 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     .into(ivProfileImage);
 
 
-            // --------------------------------------------------------------------- Video player
-
-
-            if(!tweet.exEntities.videoUrl.isEmpty()) {
+            if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type, "video")){
+                videoPlayer.setVisibility(View.VISIBLE);
                 VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
                     @Override
                     public void onPlayerItemChanged(MetaData metaData) {
+
                     }
                 });
 
-                mVideoPlayer_1.setVisibility(View.VISIBLE);
-                mVideoCover.setVisibility(View.VISIBLE);
+                mVideoPlayerManager.playNewVideo(null, videoPlayer, tweet.exEntities.videoUrl);
 
-                mVideoPlayer_1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mVideoPlayerManager.playNewVideo(null, mVideoPlayer_1, tweet.exEntities.videoUrl);
-                    }
-                });
+
             }
-            // -------------------------------------------------------------------------------
 
             // add click on a tweet
             containerItem.setOnClickListener(new View.OnClickListener() {
@@ -164,6 +153,23 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     Intent i = new Intent(context, DetailActivity.class);
                     i.putExtra("Tweet", Parcels.wrap(tweet));
                     context.startActivity(i);
+                }
+            });
+
+            // click on icon
+            tvLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int like = Integer.parseInt(tweet.favorite_count);
+                    if (!tweet.favorited){
+                     tvLike.setText(String.valueOf(++like));
+//                     tvLike.setCompoundDrawables(R.drawable.red_heart);
+                     tweet.favorited = true;
+                 }else {
+                        tvLike.setText(String.valueOf(--like));
+                    }
+
+
                 }
             });
         }

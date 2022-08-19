@@ -16,7 +16,6 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
         buildConfigField("String", "CONSUMER_KEY", apikeyProperties['CONSUMER_KEY'])
@@ -27,7 +26,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    
+
     // Related to https://github.com/scribejava/scribejava/issues/480
     // Scribe expects Java 7 or this custom Apache library
     lintOptions {
@@ -40,27 +39,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-
-
-    allprojects {
-        repositories {
-            google()
-            jcenter()
-        }
-    }
-
-    buildscript {
-        repositories {
-            jcenter()
-        }
-        dependencies {
-            classpath 'com.malmstein:fenster:0.0.2'
-        }
-    }
-}
-
-ext {
-    roomVersion = "2.1.0"
 }
 
 dependencies {
@@ -77,6 +55,8 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation 'com.facebook.stetho:stetho:1.5.1'
+
+    //swipeRefreshLayout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     // Parcel
@@ -91,10 +71,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.material:material:1.4.0'
 
-    // Room for simple persistence with an ORM
-    implementation "androidx.room:room-runtime:$roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$roomVersion"
-
-    // for video
-    compile 'com.github.danylovolokh:video-player-manager:0.2.0'
+    implementation 'com.github.danylovolokh:video-player-manager:0.2.0'
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 }

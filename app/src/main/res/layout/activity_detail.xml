@@ -82,26 +82,15 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <com.volokh.danylo.video_player_manager.ui.VideoPlayerView
-            android:id="@+id/dvideo_player_1"
+            android:id="@+id/video_player_1"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_below="@id/detailTvBody"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/detailProfileImage"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/dvideo_cover_1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:layout_below="@id/detailTvBody"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/detailProfileImage"
             android:visibility="gone"
-            android:src="@drawable/ic_twitter"/>
+            android:layout_toEndOf="@+id/detailProfileImage" />
+
 
         <TextView
             android:id="@+id/detailTvTime"

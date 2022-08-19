@@ -82,27 +82,14 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <com.volokh.danylo.video_player_manager.ui.VideoPlayerView
-        android:id="@+id/video_player_1"
+        android:id="@+id/video_player"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_below="@id/tvBody"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/video_cover_1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:layout_weight="1"
-        android:layout_below="@id/tvBody"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
         android:visibility="gone"
-        android:src="@drawable/ic_twitter"/>
+        android:layout_toEndOf="@+id/ivProfileImage" />
 
 <!--    Linearlayout for icon-->
     <LinearLayout
@@ -113,16 +100,6 @@
         android:orientation="horizontal"
         android:id="@+id/iconContainer">
 
-        <TextView
-            android:id="@+id/tvComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="11dp"
-            android:drawablePadding="8dp"
-            tools:text="23"
-            app:drawableLeftCompat="@drawable/comment_outline" />
 
         <TextView
             android:id="@+id/tvReply"

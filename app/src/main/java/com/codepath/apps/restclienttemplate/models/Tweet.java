@@ -25,6 +25,8 @@ public class Tweet {
     public String  retweet_count;
     public Entities entities;
     public ExtendedEntities exEntities;
+    public Boolean favorited;
+    public Boolean retweeted;
 
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
@@ -34,6 +36,8 @@ public class Tweet {
         tweet.id = jsonObject.getLong("id");
         tweet.favorite_count = jsonObject.getString("favorite_count");
         tweet.retweet_count = jsonObject.getString("retweet_count");
+        tweet.retweeted = jsonObject.getBoolean("retweeted");
+        tweet.favorited = jsonObject.getBoolean("favorited");
         tweet.entities = Entities.fromJson(jsonObject.getJSONObject("entities"));
 
         if (jsonObject.has("extended_entities")){

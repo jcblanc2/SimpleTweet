@@ -2,18 +2,23 @@ package com.codepath.apps.restclienttemplate;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 
-import android.content.Context;
+import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
-import com.codepath.apps.restclienttemplate.models.User;
 import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener;
 import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
 import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
@@ -22,6 +27,8 @@ import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
 
 import org.parceler.Parcels;
 import org.w3c.dom.Text;
+
+import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -33,9 +40,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView detailTvTime;
     TextView detailTvReTweet;
     TextView detailTvFavorites;
-    VideoPlayerView dvideo_player_1;
-    ImageView dvideo_cover_1;
-    Context context;
+    VideoPlayerView videoPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +50,16 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Display icon in the toolbar
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_twitter);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
+        // Display icon in the toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_left_thin);
+        getSupportActionBar().setLogo(R.drawable.ic_twitter);
         // change title
         getSupportActionBar().setTitle("   Tweet");
+
+
+
 
         detailProfileImage = findViewById(R.id.detailProfileImage);
         detailTvScreenName = findViewById(R.id.detailTvScreenName);
@@ -61,8 +69,7 @@ public class DetailActivity extends AppCompatActivity {
         detailTvReTweet = findViewById(R.id.detailTvReTweet);
         detailTvFavorites = findViewById(R.id.detailTvFavorites);
         postImage = findViewById(R.id.detailPostImage);
-        dvideo_player_1 = findViewById(R.id.video_player_1);
-        dvideo_cover_1 = findViewById(R.id.video_cover_1);
+        videoPlayer = findViewById(R.id.video_player_1);
 
         // get intent
         Tweet tweet = Parcels.unwrap(getIntent().getParcelableExtra("Tweet"));
@@ -78,6 +85,7 @@ public class DetailActivity extends AppCompatActivity {
             postImage.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(tweet.entities.media_url)
+                    .transform(new RoundedCorners(45))
                     .into(postImage);
         }
 
@@ -86,24 +94,29 @@ public class DetailActivity extends AppCompatActivity {
                 .transform(new CircleCrop())
                 .into(detailProfileImage);
 
-        if(!tweet.exEntities.videoUrl.isEmpty()) {
+        if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type, "video")){
+            videoPlayer.setVisibility(View.VISIBLE);
             VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
                 @Override
                 public void onPlayerItemChanged(MetaData metaData) {
+
                 }
             });
 
-            dvideo_player_1.setVisibility(View.VISIBLE);
-            dvideo_cover_1.setVisibility(View.VISIBLE);
+            mVideoPlayerManager.playNewVideo(null, videoPlayer, tweet.exEntities.videoUrl);
 
-            dvideo_player_1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mVideoPlayerManager.playNewVideo(null, dvideo_player_1, tweet.exEntities.videoUrl);
-                }
-            });
         }
 
 
     }
-}
+
+    // Toolbar menu
+            @Override
+            public boolean onOptionsItemSelected(MenuItem menuItem) {
+                int homeAsUp = R.id.homeAsUp;
+                    Intent i = new Intent(DetailActivity.this, TimeLineActivity.class);
+                    startActivity(i);
+                    return true ;
+            }
+
+    }
