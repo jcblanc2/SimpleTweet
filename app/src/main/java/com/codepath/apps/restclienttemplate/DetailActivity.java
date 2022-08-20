@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
@@ -42,7 +43,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView dTvShare;
     VideoPlayerView mVideoPlayer_1;
     ImageView mVideoCover;
-    Context context;
+    EditText editReply;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class DetailActivity extends AppCompatActivity {
         postImage = findViewById(R.id.detailPostImage);
         mVideoPlayer_1 = findViewById(R.id.video_player_1);
         mVideoCover = findViewById(R.id.video_cover_1);
+        editReply = findViewById(R.id.editReply);
 
         // get intent
         Tweet tweet = Parcels.unwrap(getIntent().getParcelableExtra("Tweet"));
@@ -84,6 +86,7 @@ public class DetailActivity extends AppCompatActivity {
         detailTvTime.setText(tweet.getFormattedTime(tweet.createdAt));
         detailTvFavorites.setText(tweet.favorite_count+"FAVORITES");
         detailTvReTweet.setText(tweet.retweet_count+"RETWEETS");
+        editReply.setHint("Reply to " + tweet.user.name);
 
         if (!tweet.entities.media_url.isEmpty()){
             postImage.setVisibility(View.VISIBLE);
@@ -162,8 +165,6 @@ public class DetailActivity extends AppCompatActivity {
         });
 
 
-
-
         // click on share icon
         dTvShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,10 +213,5 @@ public class DetailActivity extends AppCompatActivity {
             startActivityIfNeeded(i, 0);
             return true;
     }
-
-
-     public static void changeToRedHeart(){
-
-     }
 
     }

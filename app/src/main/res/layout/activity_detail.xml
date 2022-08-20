@@ -78,7 +78,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:visibility="gone"
-            android:layout_toEndOf="@+id/detailProfileImage"
             tools:srcCompat="@tools:sample/avatars" />
 
         <com.volokh.danylo.video_player_manager.ui.VideoPlayerView
@@ -217,12 +216,11 @@
             android:id="@+id/editReply"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/divider3"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="370dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="350dp"
             android:ems="10"
             android:inputType="text"
-            android:hint="@string/reply_to" />
+            android:hint="Reply"/>
 
 
     </RelativeLayout>

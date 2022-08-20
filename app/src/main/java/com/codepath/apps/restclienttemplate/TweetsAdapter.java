@@ -91,7 +91,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         RelativeLayout containerItem;
         ImageView imagePost;
         VideoPlayerView videoPlayer;
-        ImageView mVideoCover;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -107,7 +106,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             containerItem = itemView.findViewById(R.id.containerItem);
             imagePost = itemView.findViewById(R.id.ivPostImage);
             videoPlayer = itemView.findViewById(R.id.video_player);
-            mVideoCover = itemView.findViewById(R.id.video_cover);
         }
 
         public void bind(Tweet tweet) {
@@ -135,9 +133,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             // add video
             if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type, "video")){
                 videoPlayer.setVisibility(View.VISIBLE);
-                mVideoCover.setVisibility(View.VISIBLE);
 
-                mVideoCover.setOnClickListener(new View.OnClickListener() {
+                videoPlayer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
