@@ -2,9 +2,6 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.ColorSpace;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -91,11 +86,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvBody;
         TextView tvUsername;
         TextView tvTime;
-        TextView tvReply;
+        TextView tvRetweet;
         TextView tvLike;
         RelativeLayout containerItem;
         ImageView imagePost;
         VideoPlayerView videoPlayer;
+        ImageView mVideoCover;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -106,11 +102,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody = itemView.findViewById(R.id.tvBody);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvTime = itemView.findViewById(R.id.tvTime);
-            tvReply = itemView.findViewById(R.id.tvReply);
+            tvRetweet = itemView.findViewById(R.id.tvRetweet);
             tvLike = itemView.findViewById(R.id.tvLike);
             containerItem = itemView.findViewById(R.id.containerItem);
             imagePost = itemView.findViewById(R.id.ivPostImage);
             videoPlayer = itemView.findViewById(R.id.video_player);
+            mVideoCover = itemView.findViewById(R.id.video_cover);
         }
 
         public void bind(Tweet tweet) {
@@ -118,8 +115,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName.setText(tweet.user.name);
             tvUsername.setText("@"+tweet.user.screenName);
             tvTime.setText(Tweet.getFormattedTimestamp(tweet.createdAt));
-            tvReply.setText(tweet.retweet_count);
-            tvLike.setText(tweet.favorite_count);
+            tvRetweet.setText(tweet.getRetweet_count());
+            tvLike.setText(tweet.getFavorite_count());
 
             if (!tweet.entities.media_url.isEmpty()){
                 imagePost.setVisibility(View.VISIBLE);
@@ -135,19 +132,28 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     .into(ivProfileImage);
 
 
+            // add video
             if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type, "video")){
                 videoPlayer.setVisibility(View.VISIBLE);
-                VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
-                    @Override
-                    public void onPlayerItemChanged(MetaData metaData) {
+                mVideoCover.setVisibility(View.VISIBLE);
 
+                mVideoCover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
+                            @Override
+                            public void onPlayerItemChanged(MetaData metaData) {
+
+                            }
+                        });
+
+                        mVideoPlayerManager.playNewVideo(null, videoPlayer, tweet.exEntities.videoUrl);
                     }
                 });
-
-                mVideoPlayerManager.playNewVideo(null, videoPlayer, tweet.exEntities.videoUrl);
-
-
             }
+
+
 
             // add click on a tweet
             containerItem.setOnClickListener(new View.OnClickListener() {
@@ -159,33 +165,58 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 }
             });
 
-            // click on icon
+            // click on icon like
             tvLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int like = Integer.parseInt(tweet.favorite_count);
                     if (!tweet.favorited){
-                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart);
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
                         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                         tvLike.setCompoundDrawables(drawable, null, null, null);
 
-                        tvLike.setText(String.valueOf(++like));
+                        ++tweet.favorite_count;
+                        tvLike.setText(String.valueOf(tweet.favorite_count));
                         tweet.favorited = true;
-
-                 }else {
-                        ++like;
+                    }else {
+                        --tweet.favorite_count;
 
                         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
                         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                         tvLike.setCompoundDrawables(drawable, null, null, null);
 
-                        tvLike.setText(String.valueOf(--like));
+                        tvLike.setText(String.valueOf(tweet.favorite_count));
                         tweet.favorited = false;
                     }
-
-
                 }
             });
+
+
+            // click on icon retweet
+            tvRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!tweet.retweeted){
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.green_retweet);
+                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                        tvRetweet.setCompoundDrawables(drawable, null, null, null);
+                        ++tweet.retweet_count;
+                        tvRetweet.setText(String.valueOf(tweet.retweet_count));
+                        tweet.retweeted = true;
+                    }else {
+                        --tweet.retweet_count;
+
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.retweet);
+                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                        tvRetweet.setCompoundDrawables(drawable, null, null, null);
+
+                        tvRetweet.setText(String.valueOf(tweet.retweet_count));
+                        tweet.retweeted = false;
+                    }
+                }
+            });
+
         }
+
     }
+
 }

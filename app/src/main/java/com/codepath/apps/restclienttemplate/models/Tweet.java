@@ -21,21 +21,29 @@ public class Tweet {
     public String body;
     public String createdAt;
     public User user;
-    public String  favorite_count;
-    public String  retweet_count;
+    public int  favorite_count;
+    public int  retweet_count;
     public Entities entities;
     public ExtendedEntities exEntities;
     public Boolean favorited;
     public Boolean retweeted;
 
 
+    public String getFavorite_count() {
+        return String.valueOf(favorite_count);
+    }
+
+    public String getRetweet_count() {
+        return String.valueOf(retweet_count);
+    }
+
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.id = jsonObject.getLong("id");
-        tweet.favorite_count = jsonObject.getString("favorite_count");
-        tweet.retweet_count = jsonObject.getString("retweet_count");
+        tweet.favorite_count = jsonObject.getInt("favorite_count");
+        tweet.retweet_count = jsonObject.getInt("retweet_count");
         tweet.retweeted = jsonObject.getBoolean("retweeted");
         tweet.favorited = jsonObject.getBoolean("favorited");
         tweet.entities = Entities.fromJson(jsonObject.getJSONObject("entities"));

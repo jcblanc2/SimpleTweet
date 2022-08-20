@@ -88,8 +88,20 @@
         android:layout_below="@id/tvBody"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:scaleType="center" />
+
+    <ImageView
+        android:id="@+id/video_cover"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/tvBody"
+        android:layout_gravity="center"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="120dp"
         android:visibility="gone"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_toEndOf="@+id/ivProfileImage"
+        app:srcCompat="@drawable/ic_play" />
 
 <!--    Linearlayout for icon-->
     <LinearLayout
@@ -100,9 +112,19 @@
         android:orientation="horizontal"
         android:id="@+id/iconContainer">
 
-
         <TextView
             android:id="@+id/tvReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="11dp"
+            android:drawablePadding="8dp"
+            app:drawableLeftCompat="@drawable/reply" />
+
+
+        <TextView
+            android:id="@+id/tvRetweet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -110,7 +132,7 @@
             android:layout_marginTop="11dp"
             android:drawablePadding="8dp"
             tools:text="23"
-            app:drawableLeftCompat="@drawable/reply_variant" />
+            app:drawableLeftCompat="@drawable/retweet" />
 
         <TextView
             android:id="@+id/tvLike"
@@ -122,17 +144,6 @@
             android:drawablePadding="8dp"
             tools:text="23"
             app:drawableLeftCompat="@drawable/cards_heart_outline" />
-
-
-        <TextView
-            android:id="@+id/tvShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="55dp"
-            android:layout_marginTop="11dp"
-            android:drawablePadding="8dp"
-            app:drawableLeftCompat="@drawable/share_variant" />
     </LinearLayout>
 
     <View

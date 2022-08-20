@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/detailTvUsername"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:autoLink="all"
             android:linksClickable="true"
             tools:text="This is my first tweet!!" />
@@ -73,7 +73,7 @@
         <ImageView
             android:id="@+id/detailPostImage"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="300dp"
             android:layout_below="@id/detailTvBody"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
@@ -90,6 +90,18 @@
             android:layout_marginTop="5dp"
             android:visibility="gone"
             android:layout_toEndOf="@+id/detailProfileImage" />
+
+        <ImageView
+            android:id="@+id/video_cover_1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            android:layout_below="@id/detailTvBody"
+            android:layout_toEndOf="@+id/detailProfileImage"
+            android:layout_gravity="center"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="120dp"
+            app:srcCompat="@drawable/ic_play"/>
 
 
         <TextView
@@ -148,7 +160,7 @@
             android:id="@+id/dIconContainer">
 
             <TextView
-                android:id="@+id/dTvComment"
+                android:id="@+id/dTvReply"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -156,10 +168,10 @@
                 android:layout_marginTop="11dp"
                 android:drawablePadding="8dp"
                 tools:text="23"
-                app:drawableLeftCompat="@drawable/comment_outline" />
+                app:drawableLeftCompat="@drawable/reply" />
 
             <TextView
-                android:id="@+id/dTvReply"
+                android:id="@+id/dTvRetweet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -167,7 +179,7 @@
                 android:layout_marginTop="11dp"
                 android:drawablePadding="8dp"
                 tools:text="23"
-                app:drawableLeftCompat="@drawable/reply_variant" />
+                app:drawableLeftCompat="@drawable/retweet" />
 
             <TextView
                 android:id="@+id/dTvLike"
