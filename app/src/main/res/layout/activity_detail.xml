@@ -45,7 +45,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="0dp"
             android:layout_toEndOf="@+id/detailProfileImage"
-            android:autoLink="all"
             android:textStyle="bold"
             tools:text="John Clayton" />
 
@@ -219,8 +218,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="350dp"
             android:ems="10"
-            android:inputType="text"
-            android:hint="Reply"/>
+            android:hint="Reply"
+            android:inputType="text" />
 
 
     </RelativeLayout>

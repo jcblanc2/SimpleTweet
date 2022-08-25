@@ -97,13 +97,13 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         Glide.with(this)
-                .load(tweet.getUser().getProfileImageUrl())
+                .load(tweet.user.profileImageUrl)
                 .transform(new CircleCrop())
                 .into(detailProfileImage);
 
 
         // --------- PLAY VIDEO
-        if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type, "video")){
+        if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type2, "video")){
             mVideoPlayer_1.setVisibility(View.VISIBLE);
             mVideoCover.setVisibility(View.VISIBLE);
         }

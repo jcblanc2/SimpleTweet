@@ -40,5 +40,17 @@
             android:layout_marginTop="0dp"
             android:clipToPadding="false"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnFloating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/add_tweet"
+        app:layout_anchorGravity="bottom|right|end"
+        android:contentDescription="@string/add_twee"
+        android:backgroundTint="@color/twitter_blue"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

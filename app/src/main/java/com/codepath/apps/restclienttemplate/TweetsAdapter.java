@@ -11,11 +11,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener;
 import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
 import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
@@ -88,6 +91,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvTime;
         TextView tvRetweet;
         TextView tvLike;
+        TextView tvReply;
         RelativeLayout containerItem;
         ImageView imagePost;
         VideoPlayerView videoPlayer;
@@ -106,6 +110,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             containerItem = itemView.findViewById(R.id.containerItem);
             imagePost = itemView.findViewById(R.id.ivPostImage);
             videoPlayer = itemView.findViewById(R.id.video_player);
+            tvReply = itemView.findViewById(R.id.tvReply);
         }
 
         public void bind(Tweet tweet) {
@@ -116,13 +121,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvRetweet.setText(tweet.getRetweet_count());
             tvLike.setText(tweet.getFavorite_count());
 
-            if (!tweet.entities.media_url.isEmpty()){
-                imagePost.setVisibility(View.VISIBLE);
-                Glide.with(context)
-                        .load(tweet.entities.media_url)
-                        .transform(new RoundedCorners(45))
-                        .into(imagePost);
-            }
+//            if (!tweet.entities.media_url.isEmpty()){
+//                imagePost.setVisibility(View.VISIBLE);
+//                Glide.with(context)
+//                        .load(tweet.entities.media_url)
+//                        .transform(new RoundedCorners(45))
+//                        .into(imagePost);
+//            }
 
             Glide.with(context)
                     .load(tweet.user.profileImageUrl)
@@ -131,24 +136,24 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
 
             // add video
-            if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type, "video")){
-                videoPlayer.setVisibility(View.VISIBLE);
-
-                videoPlayer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
-                            @Override
-                            public void onPlayerItemChanged(MetaData metaData) {
-
-                            }
-                        });
-
-                        mVideoPlayerManager.playNewVideo(null, videoPlayer, tweet.exEntities.videoUrl);
-                    }
-                });
-            }
+//            if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type2, "video")){
+//                videoPlayer.setVisibility(View.VISIBLE);
+//
+//                videoPlayer.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
+//                            @Override
+//                            public void onPlayerItemChanged(MetaData metaData) {
+//
+//                            }
+//                        });
+//
+//                        mVideoPlayerManager.playNewVideo(null, videoPlayer, tweet.exEntities.videoUrl);
+//                    }
+//                });
+//            }
 
 
 
@@ -209,6 +214,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         tvRetweet.setText(String.valueOf(tweet.retweet_count));
                         tweet.retweeted = false;
                     }
+                }
+            });
+
+
+            // click on reply icon and show the modal overlay (Reply)
+            tvReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                        FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+                        ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
+                        replyFragment.show(fm, "fragment_reply");
                 }
             });
 

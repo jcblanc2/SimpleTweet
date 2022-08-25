@@ -1,14 +1,26 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
 @Parcel
+@Entity
 public class ExtendedEntities {
 
-    public String videoUrl, type;
+
+
+
+    @ColumnInfo
+    public String videoUrl;
+
+    @ColumnInfo
+    public String type2;
 
     public ExtendedEntities() {}
 
@@ -17,13 +29,12 @@ public class ExtendedEntities {
         // Check if a cover media is available
         if (!jsonObject.has("media")) {
             exEntities.videoUrl = "";
-            exEntities.type = "";
+            exEntities.type2 = "";
         } else if(jsonObject.has("media")) {
             final JSONArray media_array = jsonObject.getJSONArray("media");
             exEntities.videoUrl = media_array.getJSONObject(0).getString("url");
-            exEntities.type = media_array.getJSONObject(0).getString("type");
+            exEntities.type2 = media_array.getJSONObject(0).getString("type");
 
-//            final JSONArray media_array = jsonObject.getJSONArray("media");
 //            final JSONObject video_info = media_array.getJSONObject(0).getJSONObject("video_info");
 //            final JSONArray variants_array = video_info.getJSONArray("variants");
 //            exEntities.videoUrl = media_array.getJSONObject(0).getString("url");
