@@ -29,6 +29,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
 
     public static final String  TAG = "TimeLineActivity";
     private final int REQUEST_CODE = 20;
+    public static User currentUser;
 
     TwitterClient client;
     RecyclerView rvTweets;
@@ -178,19 +180,20 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
 
                     // Signal refresh has finished
                     swipeContainer.setRefreshing(false);
-                    adapter.notifyDataSetChanged();
+//                    adapter.notifyDataSetChanged();
 
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
                             Log.i(TAG, "Saving data from the DB");
-                            // Insert user
                             List<User> usersFromNetwork = User.fromJsonTweetArray(tweetsFromNetwork);
-                            tweetDao.insertModel(usersFromNetwork.toArray(new User[0]));
+                            List<Entities> entitiesFromNetwork = Entities.fromJsonTweetArray(tweetsFromNetwork);
 
                             // Insert entities
-//                            List<Entities> entitiesFromNetwork = Entities.fromJsonTweetArray(tweetsFromNetwork);
-//                            tweetDao.insertModel(entitiesFromNetwork.toArray(new Entities[0]));
+                            tweetDao.insertModel(entitiesFromNetwork.toArray(new Entities[0]));
+
+                            // Insert user
+                            tweetDao.insertModel(usersFromNetwork.toArray(new User[0]));
 
                             // Insert tweet
                             tweetDao.insertModel(tweetsFromNetwork.toArray(new Tweet[0]));
@@ -204,6 +207,26 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.i(TAG, "onFailure " + response, throwable);
+            }
+        });
+
+
+        client.getCredentials(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "onSuccess getCredentials" + json.toString());
+                JSONObject jsonObject = json.jsonObject;
+                try {
+                    currentUser = User.fromJson(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.e(TAG, "onFailure getCredentials", throwable);
             }
         });
     }
@@ -249,6 +272,9 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
     private void showComposeDialog() {
         FragmentManager fm = getSupportFragmentManager();
         ComposeFragment composeFragment = ComposeFragment.newInstance("Some Title");
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("CurrentUserInfo", Parcels.wrap(currentUser));
+        composeFragment.setArguments(bundle);
         composeFragment.show(fm, "fragment_compose");
     }
 

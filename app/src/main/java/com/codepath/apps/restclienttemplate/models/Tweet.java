@@ -17,8 +17,8 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
-@Parcel
 @Entity(foreignKeys = @ForeignKey(entity=User.class, parentColumns="id", childColumns="userId"))
+@Parcel
 public class Tweet {
 
     @ColumnInfo

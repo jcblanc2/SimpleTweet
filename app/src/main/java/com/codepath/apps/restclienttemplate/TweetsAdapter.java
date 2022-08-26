@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +97,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView imagePost;
         VideoPlayerView videoPlayer;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -121,13 +121,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvRetweet.setText(tweet.getRetweet_count());
             tvLike.setText(tweet.getFavorite_count());
 
-//            if (!tweet.entities.media_url.isEmpty()){
-//                imagePost.setVisibility(View.VISIBLE);
-//                Glide.with(context)
-//                        .load(tweet.entities.media_url)
-//                        .transform(new RoundedCorners(45))
-//                        .into(imagePost);
-//            }
+            if (!tweet.entities.media_url.isEmpty()){
+                imagePost.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(tweet.entities.media_url)
+                        .transform(new RoundedCorners(45))
+                        .into(imagePost);
+            }
 
             Glide.with(context)
                     .load(tweet.user.profileImageUrl)
@@ -197,6 +197,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvRetweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (!tweet.retweeted){
                         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.green_retweet);
                         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -224,6 +225,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 public void onClick(View view) {
                         FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
                         ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
+
+                        // pass info of current user
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("CurrentUserInfo", Parcels.wrap(TimeLineActivity.currentUser));
+                        replyFragment.setArguments(bundle);
+
                         replyFragment.show(fm, "fragment_reply");
                 }
             });

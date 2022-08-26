@@ -23,7 +23,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -81,6 +84,17 @@ public class ComposeFragment extends AppCompatDialogFragment {
         profileImageCompose = view.findViewById(R.id.profileImageCompose);
         tvName = view.findViewById(R.id.tvName);
         tvUserName = view.findViewById(R.id.tvUserName);
+
+        // get user info
+        Bundle bundle = getArguments();
+        User currentUserInfo = Parcels.unwrap(bundle.getParcelable("CurrentUserInfo"));
+
+        tvName.setText(currentUserInfo.name);
+        tvUserName.setText(currentUserInfo.screenName);
+        Glide.with(getContext())
+                .load(currentUserInfo.profileImageUrl)
+                .transform(new CircleCrop())
+                .into(profileImageCompose);
 
 
         // Fetch arguments from bundle and set title

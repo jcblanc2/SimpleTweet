@@ -8,10 +8,10 @@ import java.util.List;
 public class TweetWithUser {
 
     @Embedded
-    User user;
+    Entities entities;
 
-//    @Embedded
-//    Entities entities;
+    @Embedded
+    User user;
 
     @Embedded(prefix = "tweet_")
     Tweet tweet;
@@ -21,7 +21,7 @@ public class TweetWithUser {
         for(int i = 0; i < tweetWithUsers.size(); i++){
             Tweet tweet = tweetWithUsers.get(i).tweet;
             tweet.user = tweetWithUsers.get(i).user;
-//            tweet.entities = tweetWithUsers.get(i).entities;
+            tweet.entities = tweetWithUsers.get(i).entities;
             tweets.add(tweet);
         }
         return tweets;

@@ -11,8 +11,8 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
-@Parcel
 @Entity
+@Parcel
 public class User {
 
     @ColumnInfo

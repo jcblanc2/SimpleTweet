@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Parcel
 @Entity
+@Parcel
 public class Entities {
 
     @ColumnInfo

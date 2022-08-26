@@ -13,11 +13,17 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -34,6 +40,9 @@ public class ReplyFragment extends AppCompatDialogFragment {
     Button btnReplyFragment;
     ImageButton btnCancelReply;
     TwitterClient client;
+    TextView tvNameReply;
+    TextView tvUsernameReply;
+    ImageView profileImageReply;
     Context context;
 
     public ReplyFragment() {}
@@ -69,6 +78,20 @@ public class ReplyFragment extends AppCompatDialogFragment {
         etReplyFragment = view.findViewById(R.id.etReplyFragment);
         btnReplyFragment = view.findViewById(R.id.btnReplyFragment);
         btnCancelReply = view.findViewById(R.id.btnCancelReply);
+        tvNameReply = view.findViewById(R.id.tvNameReply);
+        tvUsernameReply = view.findViewById(R.id.tvUsernameReply);
+        profileImageReply = view.findViewById(R.id.profileImageReply);
+
+        // get user info
+        Bundle bundle = getArguments();
+        User currentUserInfo = Parcels.unwrap(bundle.getParcelable("CurrentUserInfo"));
+
+        tvNameReply.setText(currentUserInfo.name);
+        tvUsernameReply.setText(currentUserInfo.screenName);
+        Glide.with(getContext())
+                .load(currentUserInfo.profileImageUrl)
+                .transform(new CircleCrop())
+                .into(profileImageReply);
 
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Enter Name");
