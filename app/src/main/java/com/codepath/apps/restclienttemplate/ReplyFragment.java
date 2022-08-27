@@ -40,18 +40,14 @@ public class ReplyFragment extends AppCompatDialogFragment {
     Button btnReplyFragment;
     ImageButton btnCancelReply;
     TwitterClient client;
-    TextView tvNameReply;
-    TextView tvUsernameReply;
+    TextView tvNameReply, tvUsernameReply;
     ImageView profileImageReply;
     TextView tvInReply;
     Context context;
 
+    // constructor
     public ReplyFragment() {}
 
-    // Defines the listener interface
-    public interface ReplyDialogListener {
-        void onFinishReplyDialog(Tweet tweet);
-    }
 
     public static ReplyFragment newInstance(String title) {
         ReplyFragment frag = new ReplyFragment();
@@ -105,36 +101,7 @@ public class ReplyFragment extends AppCompatDialogFragment {
         btnReplyFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tweetContent = etReplyFragment.getText().toString();
-                if (tweetContent.isEmpty()){
-                    Toast.makeText(context, "Sorry your tweet cannot be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (tweetContent.length() > MAX_TWEET_LENGTH){
-                    Toast.makeText(context, "Sorry your tweet is too long", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // Make an API call to Twitter to publish the tweet
-                client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Log.i(TAG, "onSuccess to publish tweet");
-                        try {
-                            Tweet tweet = Tweet.fromJson(json.jsonObject);
-                            Log.i(TAG, "Published tweet says: " + tweet.body);
-//                            ReplyFragment listener = (ReplyFragment) getTargetFragment();
-//                            listener.onFinishReplyDialog(twee);
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        Log.e(TAG, "onFailure to publish tweet", throwable);
-                    }
-                });
+                publishTweet();
                 dismiss();
             }
         });
@@ -150,5 +117,37 @@ public class ReplyFragment extends AppCompatDialogFragment {
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getDialog().getWindow().setLayout(1400,2200);
+    }
+
+
+    private void publishTweet(){
+        String tweetContent = etReplyFragment.getText().toString();
+        if (tweetContent.isEmpty()){
+            Toast.makeText(context, "Sorry your tweet cannot be empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (tweetContent.length() > MAX_TWEET_LENGTH){
+            Toast.makeText(context, "Sorry your tweet is too long", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Make an API call to Twitter to publish the tweet
+        client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "onSuccess to publish tweet");
+                try {
+                    Tweet tweet = Tweet.fromJson(json.jsonObject);
+                    Log.i(TAG, "Published tweet says: " + tweet.body);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.e(TAG, "onFailure to publish tweet", throwable);
+            }
+        });
     }
 }

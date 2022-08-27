@@ -85,16 +85,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     //Define viewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView ivProfileImage;
-        TextView tvScreenName;
-        TextView tvBody;
-        TextView tvUsername;
-        TextView tvTime;
-        TextView tvRetweet;
-        TextView tvLike;
-        TextView tvReply;
+        ImageView ivProfileImage, imagePost;
+
+        TextView tvScreenName, tvBody, tvUsername, tvTime, tvRetweet, tvLike, tvReply;
         RelativeLayout containerItem;
-        ImageView imagePost;
         VideoPlayerView videoPlayer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -171,24 +165,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!tweet.favorited){
-                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
-                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                        tvLike.setCompoundDrawables(drawable, null, null, null);
-
-                        ++tweet.favorite_count;
-                        tvLike.setText(String.valueOf(tweet.favorite_count));
-                        tweet.favorited = true;
-                    }else {
-                        --tweet.favorite_count;
-
-                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
-                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                        tvLike.setCompoundDrawables(drawable, null, null, null);
-
-                        tvLike.setText(String.valueOf(tweet.favorite_count));
-                        tweet.favorited = false;
-                    }
+                    clickIconLike(tweet);
                 }
             });
 
@@ -197,24 +174,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvRetweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if (!tweet.retweeted){
-                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.green_retweet);
-                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                        tvRetweet.setCompoundDrawables(drawable, null, null, null);
-                        ++tweet.retweet_count;
-                        tvRetweet.setText(String.valueOf(tweet.retweet_count));
-                        tweet.retweeted = true;
-                    }else {
-                        --tweet.retweet_count;
-
-                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.retweet);
-                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                        tvRetweet.setCompoundDrawables(drawable, null, null, null);
-
-                        tvRetweet.setText(String.valueOf(tweet.retweet_count));
-                        tweet.retweeted = false;
-                    }
+                    clickIconRetweet(tweet);
                 }
             });
 
@@ -223,19 +183,67 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                        FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
-                        ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
-
-                        // pass info of current user
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("CurrentUserInfo", Parcels.wrap(TimeLineActivity.currentUser));
-                        bundle.putParcelable("tweet", Parcels.wrap(tweet));
-
-                        replyFragment.setArguments(bundle);
-                        replyFragment.show(fm, "fragment_reply");
+                        showReplyFragment(tweet);
                 }
             });
 
+        }
+
+        // method to show the dialog reply
+        private void showReplyFragment(Tweet tweet) {
+            FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+            ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
+
+            // pass info of current user
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("CurrentUserInfo", Parcels.wrap(TimeLineActivity.currentUser));
+            bundle.putParcelable("tweet", Parcels.wrap(tweet));
+
+            replyFragment.setArguments(bundle);
+            replyFragment.show(fm, "fragment_reply");
+        }
+
+        // method to verify if user click on  retweet icon
+        private void clickIconRetweet(Tweet tweet) {
+            if (!tweet.retweeted){
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.green_retweet);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tvRetweet.setCompoundDrawables(drawable, null, null, null);
+                ++tweet.retweet_count;
+                tvRetweet.setText(String.valueOf(tweet.retweet_count));
+                tweet.retweeted = true;
+            }else {
+                --tweet.retweet_count;
+
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.retweet);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tvRetweet.setCompoundDrawables(drawable, null, null, null);
+
+                tvRetweet.setText(String.valueOf(tweet.retweet_count));
+                tweet.retweeted = false;
+            }
+        }
+
+        // method to verify if user click on heart icon
+        private void clickIconLike(Tweet tweet) {
+            if (!tweet.favorited){
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tvLike.setCompoundDrawables(drawable, null, null, null);
+
+                ++tweet.favorite_count;
+                tvLike.setText(String.valueOf(tweet.favorite_count));
+                tweet.favorited = true;
+            }else {
+                --tweet.favorite_count;
+
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tvLike.setCompoundDrawables(drawable, null, null, null);
+
+                tvLike.setText(String.valueOf(tweet.favorite_count));
+                tweet.favorited = false;
+            }
         }
 
     }

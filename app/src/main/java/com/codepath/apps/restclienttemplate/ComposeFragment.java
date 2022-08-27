@@ -48,8 +48,7 @@ public class ComposeFragment extends AppCompatDialogFragment{
     EditText editComposeFragment;
     Button btnTweetFragment;
     ImageButton btnCancelFragment;
-    TextView tvName;
-    TextView tvUserName;
+    TextView tvName, tvUserName;
     ImageView profileImageCompose;
     TwitterClient client;
     Context context;
@@ -105,51 +104,12 @@ public class ComposeFragment extends AppCompatDialogFragment{
         String title = getArguments().getString("title", "Enter Name");
         getDialog().setTitle(title);
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String draft = pref.getString(KEY, "");
-
-        if(!draft.isEmpty()){
-            editComposeFragment.setText(draft);
-        }
+        loadDraftData();
 
         // click to add tweet
         btnTweetFragment.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String tweetContent = editComposeFragment.getText().toString();
-                if (tweetContent.isEmpty()){
-                    Toast.makeText(context, "Sorry your tweet cannot be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (tweetContent.length() > MAX_TWEET_LENGTH){
-                    Toast.makeText(context, "Sorry your tweet is too long", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // Make an API call to Twitter to publish the tweet
-                client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Log.i(TAG, "onSuccess to publish tweet");
-
-                        try {
-                            Tweet tweet = Tweet.fromJson(json.jsonObject);
-                            ComposeDialogListener listener = (ComposeDialogListener) getTargetFragment();
-                            listener.onFinishComposeDialog(tweet);
-                            Log.i(TAG, "Published tweet says: " + tweet.body);
-
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        Log.e(TAG, "onFailure to publish tweet", throwable);
-                    }
-                });
-                dismiss();
-            }
+            public void onClick(View view) {addTweet();}
         });
 
         // click to cancel and save draft
@@ -163,6 +123,15 @@ public class ComposeFragment extends AppCompatDialogFragment{
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getDialog().getWindow().setLayout(1400,2200);
+    }
+
+    private void loadDraftData() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String draft = pref.getString(KEY, "");
+
+        if(!draft.isEmpty()){
+            editComposeFragment.setText(draft);
+        }
     }
 
 
@@ -202,6 +171,42 @@ public class ComposeFragment extends AppCompatDialogFragment{
     }
 
 
+    // method to publish a tweet
+    private void addTweet(){
+        String tweetContent = editComposeFragment.getText().toString();
+        if (tweetContent.isEmpty()){
+            Toast.makeText(context, "Sorry your tweet cannot be empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (tweetContent.length() > MAX_TWEET_LENGTH){
+            Toast.makeText(context, "Sorry your tweet is too long", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Make an API call to Twitter to publish the tweet
+        client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "onSuccess to publish tweet");
+
+                try {
+                    Tweet tweet = Tweet.fromJson(json.jsonObject);
+                    ComposeDialogListener listener = (ComposeDialogListener) getTargetFragment();
+                    listener.onFinishComposeDialog(tweet);
+                    Log.i(TAG, "Published tweet says: " + tweet.body);
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.e(TAG, "onFailure to publish tweet", throwable);
+            }
+        });
+        dismiss();
+    }
 
 }
 

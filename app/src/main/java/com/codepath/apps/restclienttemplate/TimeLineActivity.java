@@ -208,6 +208,10 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
         });
 
 
+        getCurrentUserInfo();
+    }
+
+    private void getCurrentUserInfo() {
         client.getCredentials(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {

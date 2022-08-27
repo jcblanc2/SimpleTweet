@@ -43,20 +43,10 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String TAG = "DetailActivity";
     public static final int MAX_TWEET_LENGTH = 140;
-    ImageView detailProfileImage;
-    ImageView postImage;
-    TextView detailTvScreenName;
-    TextView detailTvUsername;
-    TextView detailTvBody;
-    TextView detailTvTime;
-    TextView detailTvReTweet;
-    TextView detailTvFavorites;
-    TextView dTvRetweet;
-    TextView dTvLike;
-    TextView dTvShare;
-    TextView dTvReply;
+    ImageView detailProfileImage, postImage, mVideoCover;
+    TextView detailTvScreenName, detailTvUsername, detailTvBody, detailTvTime, detailTvReTweet,
+            detailTvFavorites, dTvRetweet, dTvLike, dTvShare, dTvReply;
     VideoPlayerView mVideoPlayer_1;
-    ImageView mVideoCover;
     EditText editReply;
     Context context;
     Button btnTweet;
@@ -147,18 +137,7 @@ public class DetailActivity extends AppCompatActivity {
         // click on reply icon
         dTvReply.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                FragmentManager fm = getSupportFragmentManager();
-                ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
-
-                // pass info of current user
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("CurrentUserInfo", Parcels.wrap(TimeLineActivity.currentUser));
-                bundle.putParcelable("tweet", Parcels.wrap(tweet));
-
-                replyFragment.setArguments(bundle);
-                replyFragment.show(fm, "fragment_reply");
-            }
+            public void onClick(View view) {showReplyFragment(tweet);}
         });
 
         // change heart icon to red if we like
@@ -180,26 +159,7 @@ public class DetailActivity extends AppCompatActivity {
         // click on icon like
         dTvLike.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (!tweet.favorited){
-                    Drawable drawable = ContextCompat.getDrawable(DetailActivity.this,R.drawable.red_heart);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    dTvLike.setCompoundDrawables(drawable, null, null, null);
-
-                    ++tweet.favorite_count;
-                    detailTvFavorites.setText(tweet.favorite_count+"FAVORITES");
-                    tweet.favorited = true;
-                }else {
-                    --tweet.favorite_count;
-
-                    Drawable drawable = ContextCompat.getDrawable(DetailActivity.this,  R.drawable.cards_heart_outline);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    dTvLike.setCompoundDrawables(drawable, null, null, null);
-
-                    detailTvFavorites.setText(tweet.favorite_count+"FAVORITES");
-                    tweet.favorited = false;
-                }
-            }
+            public void onClick(View view) {clickIconLike(tweet);}
         });
 
 
@@ -219,65 +179,108 @@ public class DetailActivity extends AppCompatActivity {
         // click on icon retweet
         dTvRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (!tweet.retweeted){
-                    Drawable drawable = ContextCompat.getDrawable(DetailActivity.this, R.drawable.green_retweet);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    dTvRetweet.setCompoundDrawables(drawable, null, null, null);
-
-                    ++tweet.retweet_count;
-                    dTvRetweet.setText(String.valueOf(tweet.retweet_count));
-                    tweet.retweeted = true;
-                }else {
-                    --tweet.retweet_count;
-
-                    Drawable drawable = ContextCompat.getDrawable(DetailActivity.this, R.drawable.retweet);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    dTvRetweet.setCompoundDrawables(drawable, null, null, null);
-
-                    dTvRetweet.setText(String.valueOf(tweet.retweet_count));
-                    tweet.retweeted = false;
-                }
-            }
+            public void onClick(View view) {clickIconRetweet(tweet);}
         });
 
 
         // click on button to reply
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String tweetContent = editReply.getText().toString();
-                if (tweetContent.isEmpty()){
-                    Toast.makeText(context, "Sorry your tweet cannot be empty", Toast.LENGTH_LONG).show();
-                    return;
+            public void onClick(View view) {publishATweet();}
+        });
+    }
+
+    // method to publish a tweet
+    private void publishATweet() {
+        String tweetContent = editReply.getText().toString();
+        if (tweetContent.isEmpty()){
+            Toast.makeText(context, "Sorry your tweet cannot be empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (tweetContent.length() > MAX_TWEET_LENGTH){
+            Toast.makeText(context, "Sorry your tweet is too long", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Make an API call to Twitter to publish the tweet
+        client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "onSuccess to publish tweet");
+                try {
+                    Tweet tweet = Tweet.fromJson(json.jsonObject);
+                    Log.i(TAG, "Published tweet says: " + tweet.body);
+                    Toast.makeText(context, "Published", Toast.LENGTH_LONG).show();
+                    editReply.setHint("Reply to " + tweet.user.name);
+
+                }catch (JSONException e){
+                    e.printStackTrace();
                 }
-                if (tweetContent.length() > MAX_TWEET_LENGTH){
-                    Toast.makeText(context, "Sorry your tweet is too long", Toast.LENGTH_LONG).show();
-                    return;
-                }
+            }
 
-                // Make an API call to Twitter to publish the tweet
-                client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Log.i(TAG, "onSuccess to publish tweet");
-                        try {
-                            Tweet tweet = Tweet.fromJson(json.jsonObject);
-                            Log.i(TAG, "Published tweet says: " + tweet.body);
-                            editReply.setText("");
-
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        Log.e(TAG, "onFailure to publish tweet", throwable);
-                    }
-                });
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.e(TAG, "onFailure to publish tweet", throwable);
             }
         });
+    }
+
+    // method to verify if user click on retweet icon
+    private void clickIconRetweet(Tweet tweet) {
+        if (!tweet.retweeted){
+            Drawable drawable = ContextCompat.getDrawable(DetailActivity.this, R.drawable.green_retweet);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            dTvRetweet.setCompoundDrawables(drawable, null, null, null);
+
+            ++tweet.retweet_count;
+            dTvRetweet.setText(String.valueOf(tweet.retweet_count));
+            tweet.retweeted = true;
+        }else {
+            --tweet.retweet_count;
+
+            Drawable drawable = ContextCompat.getDrawable(DetailActivity.this, R.drawable.retweet);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            dTvRetweet.setCompoundDrawables(drawable, null, null, null);
+
+            dTvRetweet.setText(String.valueOf(tweet.retweet_count));
+            tweet.retweeted = false;
+        }
+    }
+
+    // method to verify if user click on heart icon
+    private void clickIconLike(Tweet tweet) {
+        if (!tweet.favorited){
+            Drawable drawable = ContextCompat.getDrawable(DetailActivity.this,R.drawable.red_heart);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            dTvLike.setCompoundDrawables(drawable, null, null, null);
+
+            ++tweet.favorite_count;
+            detailTvFavorites.setText(tweet.favorite_count+"FAVORITES");
+            tweet.favorited = true;
+        }else {
+            --tweet.favorite_count;
+
+            Drawable drawable = ContextCompat.getDrawable(DetailActivity.this,  R.drawable.cards_heart_outline);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            dTvLike.setCompoundDrawables(drawable, null, null, null);
+
+            detailTvFavorites.setText(tweet.favorite_count+"FAVORITES");
+            tweet.favorited = false;
+        }
+    }
+
+    // method to show dialog reply
+    private void showReplyFragment(Tweet tweet) {
+        FragmentManager fm = getSupportFragmentManager();
+        ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
+
+        // pass info of current user
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("CurrentUserInfo", Parcels.wrap(TimeLineActivity.currentUser));
+        bundle.putParcelable("tweet", Parcels.wrap(tweet));
+
+        replyFragment.setArguments(bundle);
+        replyFragment.show(fm, "fragment_reply");
     }
 
 
