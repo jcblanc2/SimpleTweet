@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="350dp"
-    android:layout_height="600dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
     tools:context=".ComposeFragment"
@@ -17,18 +17,19 @@
             android:id="@+id/btnCancelFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/ic_baseline_close_24"
-            android:contentDescription="@string/close_the_fragment"/>
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/close_the_fragment"
+            android:src="@drawable/ic_baseline_close_24" />
 
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginTop="0dp"
             android:layout_toStartOf="@id/profileImageCompose"
             android:textStyle="bold"
             tools:text="John Clayton" />
@@ -38,18 +39,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
             android:layout_below="@+id/tvName"
             android:layout_toStartOf="@id/profileImageCompose"
             tools:text="john@2000" />
 
         <ImageView
             android:id="@+id/profileImageCompose"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
             tools:srcCompat="@tools:sample/avatars" />
 
     </RelativeLayout>
@@ -90,6 +91,7 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:layout_marginEnd="5dp"
+        android:backgroundTint="@color/twitter_blue_50"
         android:text="@string/tweetCompose" />
 
 

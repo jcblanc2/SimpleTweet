@@ -43,6 +43,7 @@ public class ReplyFragment extends AppCompatDialogFragment {
     TextView tvNameReply;
     TextView tvUsernameReply;
     ImageView profileImageReply;
+    TextView tvInReply;
     Context context;
 
     public ReplyFragment() {}
@@ -68,9 +69,7 @@ public class ReplyFragment extends AppCompatDialogFragment {
 
 
     @Override
-
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
 
         // Get field from view
@@ -81,11 +80,16 @@ public class ReplyFragment extends AppCompatDialogFragment {
         tvNameReply = view.findViewById(R.id.tvNameReply);
         tvUsernameReply = view.findViewById(R.id.tvUsernameReply);
         profileImageReply = view.findViewById(R.id.profileImageReply);
+        tvInReply = view.findViewById(R.id.tvInReply);
 
         // get user info
         Bundle bundle = getArguments();
         User currentUserInfo = Parcels.unwrap(bundle.getParcelable("CurrentUserInfo"));
+        Tweet tweet = Parcels.unwrap(bundle.getParcelable("tweet"));
 
+
+        tvInReply.setText("In reply to" + tweet.user.name);
+        etReplyFragment.setText(tweet.user.screenName);
         tvNameReply.setText(currentUserInfo.name);
         tvUsernameReply.setText(currentUserInfo.screenName);
         Glide.with(getContext())
@@ -96,13 +100,6 @@ public class ReplyFragment extends AppCompatDialogFragment {
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Enter Name");
         getDialog().setTitle(title);
-
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String draft = pref.getString(TEXT, "");
-        // check if draft exist
-        if(!draft.isEmpty()){
-            etReplyFragment.setText(draft);
-        }
 
         // Set click on button
         btnReplyFragment.setOnClickListener(new View.OnClickListener() {
@@ -147,12 +144,6 @@ public class ReplyFragment extends AppCompatDialogFragment {
         btnCancelReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tweetContent = etReplyFragment.getText().toString();
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-                SharedPreferences.Editor edit = pref.edit();
-                edit.putString(TEXT, tweetContent);
-                edit.commit();
-                Log.i(TAG, tweetContent);
                 dismiss();
             }
         });

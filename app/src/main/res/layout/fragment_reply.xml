@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350dp"
-    android:layout_height="600dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
@@ -19,8 +19,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/white"
             android:src="@drawable/ic_baseline_close_24"
             android:contentDescription="@string/close_the_fragment"/>
+
+        <TextView
+            android:id="@+id/tvInReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/btnCancelReply"
+            android:textStyle="bold"
+            tools:text="In reply to"
+            android:drawablePadding="5dp"
+            app:drawableStartCompat="@drawable/arrow_down" />
 
 
         <TextView
@@ -59,12 +72,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:counterEnabled="true"
+        android:layout_marginTop="10dp"
         app:counterMaxLength="140">
 
         <EditText
             android:id="@+id/etReplyFragment"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
@@ -73,7 +87,6 @@
             android:layout_marginTop="5dp"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="@string/what_s_happening"
             android:inputType="textMultiLine"
             android:minLines="5"/>
     </com.google.android.material.textfield.TextInputLayout>

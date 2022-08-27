@@ -3,6 +3,9 @@ package com.codepath.apps.restclienttemplate;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -41,9 +44,11 @@ public class DetailActivity extends AppCompatActivity {
     TextView dTvRetweet;
     TextView dTvLike;
     TextView dTvShare;
+    TextView dTvReply;
     VideoPlayerView mVideoPlayer_1;
     ImageView mVideoCover;
     EditText editReply;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class DetailActivity extends AppCompatActivity {
         mVideoPlayer_1 = findViewById(R.id.video_player_1);
         mVideoCover = findViewById(R.id.video_cover_1);
         editReply = findViewById(R.id.editReply);
+        dTvReply = findViewById(R.id.dTvReply);
 
         // get intent
         Tweet tweet = Parcels.unwrap(getIntent().getParcelableExtra("Tweet"));
@@ -122,6 +128,23 @@ public class DetailActivity extends AppCompatActivity {
                     mVideoPlayerManager.playNewVideo(null, mVideoPlayer_1, "https://github.com/jcblanc2/Flixster/blob/master/walkthrough.gif");
                 }
             });
+
+        // click on reply icon
+        dTvReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getSupportFragmentManager();
+                ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
+
+                // pass info of current user
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("CurrentUserInfo", Parcels.wrap(TimeLineActivity.currentUser));
+                bundle.putParcelable("tweet", Parcels.wrap(tweet));
+
+                replyFragment.setArguments(bundle);
+                replyFragment.show(fm, "fragment_reply");
+            }
+        });
 
         // change heart icon to red if we like
         if(tweet.favorited){

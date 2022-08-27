@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.sip.SipSession;
@@ -20,7 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
@@ -32,11 +35,12 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import java.util.Objects;
 import java.util.zip.Inflater;
 
 import okhttp3.Headers;
 
-public class ComposeFragment extends AppCompatDialogFragment {
+public class ComposeFragment extends AppCompatDialogFragment{
 
     public static final String TAG = "ComposeFragment";
     public static final int MAX_TWEET_LENGTH = 140;
@@ -64,7 +68,7 @@ public class ComposeFragment extends AppCompatDialogFragment {
         frag.setArguments(args);
         return frag;
     }
-    
+
 
     @Nullable
     @Override
@@ -152,13 +156,7 @@ public class ComposeFragment extends AppCompatDialogFragment {
       btnCancelFragment.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-              String tweetContent = editComposeFragment.getText().toString();
-              SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-              SharedPreferences.Editor edit = pref.edit();
-              edit.putString(TEXT, tweetContent);
-              edit.commit();
-              Log.i(TAG, tweetContent);
-              dismiss();
+              openPrompt();
           }
       });
 
@@ -168,4 +166,43 @@ public class ComposeFragment extends AppCompatDialogFragment {
     }
 
 
+    // Method to show the prompt to save draft
+    public void openPrompt(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setMessage("Save draft?");
+
+        alertDialogBuilder.setPositiveButton("Save",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        saveDraft();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("Delete",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+
+    // Method to save draft
+    private void saveDraft(){
+        String tweetContent = editComposeFragment.getText().toString();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString(TEXT, tweetContent);
+        edit.commit();
+        dismiss();
+    }
+
+
+
 }
+
+

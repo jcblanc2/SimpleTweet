@@ -229,8 +229,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         // pass info of current user
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("CurrentUserInfo", Parcels.wrap(TimeLineActivity.currentUser));
-                        replyFragment.setArguments(bundle);
+                        bundle.putParcelable("tweet", Parcels.wrap(tweet));
 
+                        replyFragment.setArguments(bundle);
                         replyFragment.show(fm, "fragment_reply");
                 }
             });

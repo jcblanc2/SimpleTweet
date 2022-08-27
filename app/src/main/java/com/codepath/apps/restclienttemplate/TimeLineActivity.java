@@ -214,7 +214,7 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
         client.getCredentials(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.i(TAG, "onSuccess getCredentials" + json.toString());
+                Log.i(TAG, "onSuccess Credentials" + json.toString());
                 JSONObject jsonObject = json.jsonObject;
                 try {
                     currentUser = User.fromJson(jsonObject);
@@ -226,7 +226,7 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.e(TAG, "onFailure getCredentials", throwable);
+                Log.e(TAG, "onFailure Credentials", throwable);
             }
         });
     }
@@ -272,9 +272,11 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
     private void showComposeDialog() {
         FragmentManager fm = getSupportFragmentManager();
         ComposeFragment composeFragment = ComposeFragment.newInstance("Some Title");
+
         Bundle bundle = new Bundle();
         bundle.putParcelable("CurrentUserInfo", Parcels.wrap(currentUser));
         composeFragment.setArguments(bundle);
+
         composeFragment.show(fm, "fragment_compose");
     }
 

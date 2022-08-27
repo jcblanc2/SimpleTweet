@@ -160,13 +160,13 @@
             <TextView
                 android:id="@+id/dTvReply"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_height="9dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="11dp"
                 android:drawablePadding="8dp"
-                tools:text="23"
-                app:drawableLeftCompat="@drawable/reply" />
+                android:orientation="horizontal"
+                app:drawableLeftCompat="@drawable/reply"
+                tools:text="23" />
 
             <TextView
                 android:id="@+id/dTvRetweet"
@@ -218,8 +218,15 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="350dp"
             android:ems="10"
-            android:hint="Reply"
+            android:hint="@string/reply"
             android:inputType="text" />
+
+        <Button
+            android:id="@+id/btnTweet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tweet_btn"
+            android:backgroundTint="@color/twitter_blue"/>
 
 
     </RelativeLayout>
