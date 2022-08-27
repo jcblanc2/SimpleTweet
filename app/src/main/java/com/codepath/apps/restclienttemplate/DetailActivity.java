@@ -10,15 +10,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener;
 import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
 import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
@@ -26,13 +31,18 @@ import com.volokh.danylo.video_player_manager.meta.MetaData;
 import com.volokh.danylo.video_player_manager.ui.SimpleMainThreadMediaPlayerListener;
 import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
 
+import org.json.JSONException;
 import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
 import java.util.Objects;
 
+import okhttp3.Headers;
+
 public class DetailActivity extends AppCompatActivity {
 
+    public static final String TAG = "DetailActivity";
+    public static final int MAX_TWEET_LENGTH = 140;
     ImageView detailProfileImage;
     ImageView postImage;
     TextView detailTvScreenName;
@@ -49,6 +59,8 @@ public class DetailActivity extends AppCompatActivity {
     ImageView mVideoCover;
     EditText editReply;
     Context context;
+    Button btnTweet;
+    TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +94,9 @@ public class DetailActivity extends AppCompatActivity {
         mVideoCover = findViewById(R.id.video_cover_1);
         editReply = findViewById(R.id.editReply);
         dTvReply = findViewById(R.id.dTvReply);
+        btnTweet = findViewById(R.id.btnTweet);
+        client = TwitterApp.getRestClient(context);
+
 
         // get intent
         Tweet tweet = Parcels.unwrap(getIntent().getParcelableExtra("Tweet"));
@@ -108,26 +123,26 @@ public class DetailActivity extends AppCompatActivity {
                 .into(detailProfileImage);
 
 
-        // --------- PLAY VIDEO
-        if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type2, "video")){
-            mVideoPlayer_1.setVisibility(View.VISIBLE);
-            mVideoCover.setVisibility(View.VISIBLE);
-        }
-
-        mVideoCover.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
-                        @Override
-                        public void onPlayerItemChanged(MetaData metaData) {
-
-                        }
-                    });
-
-                    mVideoPlayerManager.playNewVideo(null, mVideoPlayer_1, "https://github.com/jcblanc2/Flixster/blob/master/walkthrough.gif");
-                }
-            });
+//        // --------- PLAY VIDEO
+//        if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type2, "video")){
+//            mVideoPlayer_1.setVisibility(View.VISIBLE);
+//            mVideoCover.setVisibility(View.VISIBLE);
+//        }
+//
+//        mVideoCover.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
+//                        @Override
+//                        public void onPlayerItemChanged(MetaData metaData) {
+//
+//                        }
+//                    });
+//
+//                    mVideoPlayerManager.playNewVideo(null, mVideoPlayer_1, "https://github.com/jcblanc2/Flixster/blob/master/walkthrough.gif");
+//                }
+//            });
 
         // click on reply icon
         dTvReply.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +238,44 @@ public class DetailActivity extends AppCompatActivity {
                     dTvRetweet.setText(String.valueOf(tweet.retweet_count));
                     tweet.retweeted = false;
                 }
+            }
+        });
+
+
+        // click on button to reply
+        btnTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tweetContent = editReply.getText().toString();
+                if (tweetContent.isEmpty()){
+                    Toast.makeText(context, "Sorry your tweet cannot be empty", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (tweetContent.length() > MAX_TWEET_LENGTH){
+                    Toast.makeText(context, "Sorry your tweet is too long", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // Make an API call to Twitter to publish the tweet
+                client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+                        Log.i(TAG, "onSuccess to publish tweet");
+                        try {
+                            Tweet tweet = Tweet.fromJson(json.jsonObject);
+                            Log.i(TAG, "Published tweet says: " + tweet.body);
+                            editReply.setText("");
+
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        Log.e(TAG, "onFailure to publish tweet", throwable);
+                    }
+                });
             }
         });
     }

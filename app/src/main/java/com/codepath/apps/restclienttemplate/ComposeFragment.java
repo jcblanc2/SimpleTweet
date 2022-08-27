@@ -44,7 +44,7 @@ public class ComposeFragment extends AppCompatDialogFragment{
 
     public static final String TAG = "ComposeFragment";
     public static final int MAX_TWEET_LENGTH = 140;
-    public static final String TEXT = "tweet";
+    public static final String KEY = "tweet";
     EditText editComposeFragment;
     Button btnTweetFragment;
     ImageButton btnCancelFragment;
@@ -106,7 +106,7 @@ public class ComposeFragment extends AppCompatDialogFragment{
         getDialog().setTitle(title);
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String draft = pref.getString(TEXT, "");
+        String draft = pref.getString(KEY, "");
 
         if(!draft.isEmpty()){
             editComposeFragment.setText(draft);
@@ -196,7 +196,7 @@ public class ComposeFragment extends AppCompatDialogFragment{
         String tweetContent = editComposeFragment.getText().toString();
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor edit = pref.edit();
-        edit.putString(TEXT, tweetContent);
+        edit.putString(KEY, tweetContent);
         edit.commit();
         dismiss();
     }

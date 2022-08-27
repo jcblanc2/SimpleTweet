@@ -214,21 +214,21 @@
             android:id="@+id/editReply"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/divider3"
             android:layout_marginTop="350dp"
             android:ems="10"
+            android:layout_above="@+id/btnTweet"
             android:hint="@string/reply"
             android:inputType="text" />
 
         <Button
             android:id="@+id/btnTweet"
-            android:layout_below="@+id/editReply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
             android:backgroundTint="@color/twitter_blue"
             android:text="@string/tweet_btn" />
-
 
     </RelativeLayout>
 
