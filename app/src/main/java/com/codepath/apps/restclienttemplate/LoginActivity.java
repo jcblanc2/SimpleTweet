@@ -28,7 +28,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		setSupportActionBar(toolbar);
 
 		// change title
-		getSupportActionBar().setTitle("SimpleTweet");
+		getSupportActionBar().setTitle("Twitter");
 
 
 		final SampleModel sampleModel = new SampleModel();

@@ -83,8 +83,6 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
             public void onClick(View view) {
                 // navigate to the compose fragment
                 showComposeDialog();
-//                Intent i = new Intent(TimeLineActivity.this, ComposeActivity.class);
-//                startActivityForResult(i, REQUEST_CODE);
             }
         });
 
@@ -180,7 +178,6 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
 
                     // Signal refresh has finished
                     swipeContainer.setRefreshing(false);
-//                    adapter.notifyDataSetChanged();
 
                     AsyncTask.execute(new Runnable() {
                         @Override
@@ -231,19 +228,6 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
         });
     }
 
-
-    // Toolbar menu
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.compose){
-            // navigate to the compose activity
-            showComposeDialog();
-//            Intent i = new Intent(this, ComposeActivity.class);
-//            startActivityForResult(i, REQUEST_CODE);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

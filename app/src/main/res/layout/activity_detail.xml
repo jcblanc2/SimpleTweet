@@ -198,7 +198,6 @@
                 android:layout_marginStart="55dp"
                 android:layout_marginTop="11dp"
                 android:drawablePadding="8dp"
-                tools:text="23"
                 app:drawableLeftCompat="@drawable/share_variant" />
         </LinearLayout>
 
@@ -216,6 +215,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_below="@+id/divider3"
             android:layout_marginTop="350dp"
             android:ems="10"
             android:hint="@string/reply"
@@ -223,10 +223,11 @@
 
         <Button
             android:id="@+id/btnTweet"
+            android:layout_below="@+id/editReply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tweet_btn"
-            android:backgroundTint="@color/twitter_blue"/>
+            android:backgroundTint="@color/twitter_blue"
+            android:text="@string/tweet_btn" />
 
 
     </RelativeLayout>

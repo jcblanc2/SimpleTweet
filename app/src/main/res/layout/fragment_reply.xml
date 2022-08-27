@@ -94,11 +94,13 @@
     <Button
         android:id="@+id/btnReplyFragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="33dp"
         android:layout_gravity="right"
         android:layout_marginTop="5dp"
-        android:orientation="horizontal"
         android:layout_marginEnd="5dp"
+        android:orientation="horizontal"
+        android:textColor="@color/white"
+        android:background="@color/twitter_blue"
         android:text="@string/tweetCompose" />
 
 </LinearLayout>

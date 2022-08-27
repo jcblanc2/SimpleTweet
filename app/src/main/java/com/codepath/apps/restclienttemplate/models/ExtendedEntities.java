@@ -13,9 +13,6 @@ import org.parceler.Parcel;
 @Entity
 public class ExtendedEntities {
 
-
-
-
     @ColumnInfo
     public String videoUrl;
 
@@ -34,11 +31,6 @@ public class ExtendedEntities {
             final JSONArray media_array = jsonObject.getJSONArray("media");
             exEntities.videoUrl = media_array.getJSONObject(0).getString("url");
             exEntities.type2 = media_array.getJSONObject(0).getString("type");
-
-//            final JSONObject video_info = media_array.getJSONObject(0).getJSONObject("video_info");
-//            final JSONArray variants_array = video_info.getJSONArray("variants");
-//            exEntities.videoUrl = media_array.getJSONObject(0).getString("url");
-//            exEntities.type = media_array.getJSONObject(0).getString("type");
         }
         return exEntities;
     }
