@@ -34,7 +34,7 @@ import okhttp3.Headers;
 public class ReplyFragment extends AppCompatDialogFragment {
 
     public static final String TAG = "ReplyFragment";
-    public static final int MAX_TWEET_LENGTH = 140;
+    public static final int MAX_TWEET_LENGTH = 280;
     public static final String TEXT = "reply";
     EditText etReplyFragment;
     Button btnReplyFragment;

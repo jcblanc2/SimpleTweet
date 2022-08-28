@@ -112,28 +112,6 @@ public class DetailActivity extends AppCompatActivity {
                 .transform(new CircleCrop())
                 .into(detailProfileImage);
 
-
-//        // --------- PLAY VIDEO
-//        if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type2, "video")){
-//            mVideoPlayer_1.setVisibility(View.VISIBLE);
-//            mVideoCover.setVisibility(View.VISIBLE);
-//        }
-//
-//        mVideoCover.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
-//                        @Override
-//                        public void onPlayerItemChanged(MetaData metaData) {
-//
-//                        }
-//                    });
-//
-//                    mVideoPlayerManager.playNewVideo(null, mVideoPlayer_1, "https://github.com/jcblanc2/Flixster/blob/master/walkthrough.gif");
-//                }
-//            });
-
         // click on reply icon
         dTvReply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +146,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, tweet.body);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, Tweet.getUrl(tweet));
                 sendIntent.setType("text/plain");
                 Intent shareIntent = Intent.createChooser(sendIntent, "Share this via");
                 startActivity(shareIntent);

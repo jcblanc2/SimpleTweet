@@ -108,4 +108,8 @@ public class Tweet {
     public static String  getFormattedTime(String createdAt){
         return TimeFormatter.getTimeStamp(createdAt);
     }
+
+    public static String getUrl(Tweet tweet){
+        return "https://twitter.com/" +  tweet.user.screenName + "/status/" + tweet.id;
+    }
 }

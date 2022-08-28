@@ -9,9 +9,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Parcel
-@Entity
 public class ExtendedEntities {
+
+    @ColumnInfo
+    @PrimaryKey
+    public Long idExEntities;
 
     @ColumnInfo
     public String videoUrl;
@@ -29,9 +35,18 @@ public class ExtendedEntities {
             exEntities.type2 = "";
         } else if(jsonObject.has("media")) {
             final JSONArray media_array = jsonObject.getJSONArray("media");
-            exEntities.videoUrl = media_array.getJSONObject(0).getString("url");
+            exEntities.idExEntities = media_array.getJSONObject(0).getLong("id");
             exEntities.type2 = media_array.getJSONObject(0).getString("type");
+
+            if(exEntities.type2.equals("video")){
+                JSONObject video_info = media_array.getJSONObject(0).getJSONObject("video_info");
+//                JSONArray variants = video_info.getJSONArray("variants");
+            }else {
+                exEntities.videoUrl = "";
+            }
         }
         return exEntities;
     }
+
+
 }

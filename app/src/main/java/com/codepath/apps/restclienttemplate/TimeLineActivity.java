@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.codepath.apps.restclienttemplate.models.Entities;
+import com.codepath.apps.restclienttemplate.models.ExtendedEntities;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.apps.restclienttemplate.models.TweetWithUser;
@@ -186,6 +187,7 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
                             List<User> usersFromNetwork = User.fromJsonTweetArray(tweetsFromNetwork);
                             List<Entities> entitiesFromNetwork = Entities.fromJsonTweetArray(tweetsFromNetwork);
 
+
                             // Insert entities
                             tweetDao.insertModel(entitiesFromNetwork.toArray(new Entities[0]));
 
@@ -237,6 +239,14 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeFragme
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.compose){
+            showComposeDialog();
+        }
         return true;
     }
 

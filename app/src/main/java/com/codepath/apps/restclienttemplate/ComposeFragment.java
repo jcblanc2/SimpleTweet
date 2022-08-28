@@ -43,7 +43,7 @@ import okhttp3.Headers;
 public class ComposeFragment extends AppCompatDialogFragment{
 
     public static final String TAG = "ComposeFragment";
-    public static final int MAX_TWEET_LENGTH = 140;
+    public static final int MAX_TWEET_LENGTH = 280;
     public static final String KEY = "tweet";
     EditText editComposeFragment;
     Button btnTweetFragment;

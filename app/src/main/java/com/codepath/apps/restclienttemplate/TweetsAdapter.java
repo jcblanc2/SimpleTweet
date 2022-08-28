@@ -128,29 +128,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     .transform(new CircleCrop())
                     .into(ivProfileImage);
 
-
-            // add video
-//            if (!tweet.exEntities.videoUrl.isEmpty() && Objects.equals(tweet.exEntities.type2, "video")){
-//                videoPlayer.setVisibility(View.VISIBLE);
-//
-//                videoPlayer.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                        VideoPlayerManager<MetaData> mVideoPlayerManager = new SingleVideoPlayerManager(new PlayerItemChangeListener() {
-//                            @Override
-//                            public void onPlayerItemChanged(MetaData metaData) {
-//
-//                            }
-//                        });
-//
-//                        mVideoPlayerManager.playNewVideo(null, videoPlayer, tweet.exEntities.videoUrl);
-//                    }
-//                });
-//            }
-
-
-
             // add click on a tweet
             containerItem.setOnClickListener(new View.OnClickListener() {
                 @Override
